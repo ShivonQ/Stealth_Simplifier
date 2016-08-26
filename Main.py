@@ -12,6 +12,7 @@ def main():
     selected_PCs=[]
     selected_NPCs=[]
     outermost_loop_variable = True
+    setup_menu_loop = True
     # Follows are the various menus that the user will be navigating
     def display_main_menu():
         print('Welcome to the stealth simplifier app.'
@@ -36,6 +37,7 @@ def main():
 
         if len(selected_NPCs) >= 1 and len(selected_PCs) >= 1:
             print('5)Run Stealth Checks with currently selected NPC\'s and PC\'s.')
+        print('X) Exit this menu to main menu.')
     # add pcs to pool
 
     def add_PC_to_pool():
@@ -80,8 +82,33 @@ def main():
         main_menu_choice = input('Please Choose An Option From Above')
 
         if main_menu_choice == '1':
+            setup_menu_loop = True
             print('ENTERING SETUP AND RUN')
-            display_setup_menu()
+            while setup_menu_loop:
+                # Show the Setup Menu
+                display_setup_menu()
+                # User Selects and Option
+                # TODO: Surely there is a better way to do menus.
+                setup_menu_choice = input('Please Choose and Option from above')
+                if setup_menu_choice == '1':
+                    print('Running Add PC to Pool Method')
+                    # Add a PC
+                    add_PC_to_pool()
+                elif setup_menu_choice == '2':
+                    print('Running Add NPC to Pool Method')
+
+                elif setup_menu_choice == '3' and current_PC_pool == True:
+                    print('Running Select a PC Method')
+
+                elif setup_menu_choice == '4' and current_NPC_pool == True:
+                    print('Running Select a NPC Method')
+
+                elif setup_menu_choice == '5' and selected_PCs == True and selected_NPCs == True:
+                    print('Running Checks with Tabulate OutPut')
+
+                elif setup_menu_choice.lower() == 'x':
+                    print('Exiting Setup Menu')
+                    setup_menu_loop=False
 
 
 
