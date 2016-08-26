@@ -43,19 +43,21 @@ def main():
         stats_list=[]
         name = input('What is the Character\'s name?')
         stats_list.append(name)
+        # TODO: Switch it so instead of "Character's" it actually says the name.
         while True:
             try:
                 spot_mod = int(input('What is the Character\'s Spot Modifier?'))
                 stats_list.append(spot_mod)
+                break
             except ValueError:
                 print('That was not a valid number please enter an integer.')
-
+        while True:
             try:
                 listen_mod = int(input('What is the Character\'s Listen Modifier?'))
                 stats_list.append(listen_mod)
+                break
             except ValueError:
                 print('That was not a valid number please enter an integer.')
-            break
         return stats_list
 
 
@@ -79,28 +81,29 @@ def main():
             try:
                 sneak_mod = int(input('What is the PC\'s Move Silently Modifier?'))
                 char_data_set.append(sneak_mod)
-            except ValueError:
-                print('That was not a valid number please enter an integer.')
-
-            try:
-                hide_mod = int(input('What is the PC\'s Hide Modifier?'))
-                char_data_set.append(hide_mod)
-            except ValueError:
-                print('That was not a valid number please enter an integer.')
-
-            try:
-                while True:
-                    speed = int(input('What is the PC\'s speed in 5 foot intervals(5 or 10 or 15, etc...)?'))
-
-                    if (speed % 5) != 0:
-
-                        print('Please enter a valid speed (in intervals of 5 feet 5,10,15, etc...)')
-                    elif (speed % 5) == 0:
-                        char_data_set.append(speed)
-                        break
                 break
             except ValueError:
                 print('That was not a valid number please enter an integer.')
+        while True:
+            try:
+                hide_mod = int(input('What is the PC\'s Hide Modifier?'))
+                char_data_set.append(hide_mod)
+                break
+            except ValueError:
+                print('That was not a valid number please enter an integer.')
+        try:
+            while True:
+                speed = int(input('What is the PC\'s speed in 5 foot intervals(5 or 10 or 15, etc...)?'))
+
+                if (speed % 5) != 0:
+
+                    print('That was not a valid speed, try again.)')
+                elif (speed % 5) == 0:
+                    char_data_set.append(speed)
+                    break
+        except ValueError:
+            print('That was not a valid number please enter an integer.')
+
         #         MAKE THE PC IS EVERYTHING WENT FINE
         new_pc = PC.PC(char_data_set[0], char_data_set[1], char_data_set[2], char_data_set[3], char_data_set[4], char_data_set[5])
         current_PC_pool.append(new_pc)
@@ -126,7 +129,8 @@ def main():
                 elif setup_menu_choice == '2':
                     print('Running Add NPC to Pool Method')
                     char_data_set = add_NPC_to_pool()
-                    NPC.NPC(char_data_set[0], char_data_set[1], char_data_set[2])
+                    new_npc = NPC.NPC(char_data_set[0], char_data_set[1], char_data_set[2])
+                    current_NPC_pool.append(new_npc)
                 elif setup_menu_choice == '3' and current_PC_pool == True:
                     print('Running Select a PC Method')
 
