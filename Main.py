@@ -37,51 +37,78 @@ def main():
 
         if len(selected_NPCs) >= 1 and len(selected_PCs) >= 1:
             print('5)Run Stealth Checks with currently selected NPC\'s and PC\'s.')
-        print('X) Exit this menu to main menu.')
+        print('X) Exit this menu to main menu.\n')
     # add pcs to pool
+    def add_NPC_to_pool():
+        stats_list=[]
+        name = input('What is the Character\'s name?')
+        stats_list.append(name)
+        while True:
+            try:
+                spot_mod = int(input('What is the Character\'s Spot Modifier?'))
+                stats_list.append(spot_mod)
+            except ValueError:
+                print('That was not a valid number please enter an integer.')
+
+            try:
+                listen_mod = int(input('What is the Character\'s Listen Modifier?'))
+                stats_list.append(listen_mod)
+            except ValueError:
+                print('That was not a valid number please enter an integer.')
+            break
+        return stats_list
+
 
     def add_PC_to_pool():
         # Add a detector for whatever symbol you keep the items in the file seperated by
         # Perhaps make this method return a list of values.  That way I can have PC just fill in the last 3 elements of NPC.  ERGO More succinct.
-        name = input('What is the PC\'s name?')
+
+        char_data_set = add_NPC_to_pool()
+
         while True:
+            # try:
+            #     spot_mod = int(input('What is the PC\'s Spot Modifier?'))
+            # except ValueError:
+            #     print('That was not a valid number please enter an integer.')
+            #
+            # try:
+            #     listen_mod = int(input('What is the PC\'s Listen Modifier?'))
+            # except ValueError:
+            #     print('That was not a valid number please enter an integer.')
+            #
             try:
-                spot_mod = int(input('What is the PC\'s Spot Modifier?'))
-                try:
-                    listen_mod = int(input('What is the PC\'s Listen Modifier?'))
-                    try:
-                        sneak_mod = int(input('What is the PC\'s Move Silently Modifier?'))
-                        try:
-                            hide_mod = int(input('What is the PC\'s Hide Modifier?'))
-                            try:
-                                while True:
-                                    speed = int(input('What is the PC\'s speed in 5 foot intervals(5 or 10 or 15, etc...)?'))
-
-                                    if (speed % 5) != 0:
-
-                                        speed = int(input('Please enter a valid speed (in intervals of 5 feet 5,10,15, etc...)'))
-                                    elif (speed % 5) == 0:
-                                        break
-                                break
-                            except ValueError:
-                                print('That was not a valid number please enter an integer.')
-                        except ValueError:
-                            print('That was not a valid number please enter an integer.')
-                    except ValueError:
-                        print('That was not a valid number please enter an integer.')
-                except ValueError:
-                    print('That was not a valid number please enter an integer.')
+                sneak_mod = int(input('What is the PC\'s Move Silently Modifier?'))
+                char_data_set.append(sneak_mod)
             except ValueError:
                 print('That was not a valid number please enter an integer.')
 
+            try:
+                hide_mod = int(input('What is the PC\'s Hide Modifier?'))
+                char_data_set.append(hide_mod)
+            except ValueError:
+                print('That was not a valid number please enter an integer.')
+
+            try:
+                while True:
+                    speed = int(input('What is the PC\'s speed in 5 foot intervals(5 or 10 or 15, etc...)?'))
+
+                    if (speed % 5) != 0:
+
+                        print('Please enter a valid speed (in intervals of 5 feet 5,10,15, etc...)')
+                    elif (speed % 5) == 0:
+                        char_data_set.append(speed)
+                        break
+                break
+            except ValueError:
+                print('That was not a valid number please enter an integer.')
         #         MAKE THE PC IS EVERYTHING WENT FINE
-        new_pc = PC.PC(name, spot_mod, listen_mod, sneak_mod, hide_mod, speed)
+        new_pc = PC.PC(char_data_set[0], char_data_set[1], char_data_set[2], char_data_set[3], char_data_set[4], char_data_set[5])
         current_PC_pool.append(new_pc)
 
     # Here begins the guts of the runtime components
     while outermost_loop_variable:
         display_main_menu()
-        main_menu_choice = input('Please Choose An Option From Above')
+        main_menu_choice = input('Please Choose An Option From Above.\n')
 
         if main_menu_choice == '1':
             setup_menu_loop = True
@@ -91,14 +118,15 @@ def main():
                 display_setup_menu()
                 # User Selects and Option
                 # TODO: Surely there is a better way to do menus.
-                setup_menu_choice = input('Please Choose and Option from above')
+                setup_menu_choice = input('Please Choose And Option From Above.\n')
                 if setup_menu_choice == '1':
                     print('Running Add PC to Pool Method')
                     # Add a PC
                     add_PC_to_pool()
                 elif setup_menu_choice == '2':
                     print('Running Add NPC to Pool Method')
-
+                    char_data_set = add_NPC_to_pool()
+                    NPC.NPC(char_data_set[0], char_data_set[1], char_data_set[2])
                 elif setup_menu_choice == '3' and current_PC_pool == True:
                     print('Running Select a PC Method')
 
@@ -111,8 +139,6 @@ def main():
                 elif setup_menu_choice.lower() == 'x':
                     print('Exiting Setup Menu')
                     setup_menu_loop=False
-
-
 
         elif main_menu_choice == '2':
             # Version 2.0 will save some of these and allow editing of saved ones.
