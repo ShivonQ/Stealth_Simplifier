@@ -1,0 +1,81 @@
+import tabulate
+import sys
+
+
+def main():
+    print('Program is Running')
+    current_PC_pool = []
+    current_NPC_pool = []
+    selected_PCs=[]
+    selected_NPCs=[]
+    outermost_loop_variable = True
+    # Follows are the various menus that the user will be navigating
+    def display_main_menu():
+        print('Welcome to the stealth simplifier app.'
+                               '\nMore options to come in future editions.'
+                               '\n----------'
+                               '\n1)Setup and run stealth checks.'
+                               '\n2)Exit program.')
+    # One menu deep, this is where PCs and NPCs will be chosen and
+    # added
+    def display_setup_menu():
+        print('----------'
+              '\nSetup Menu'
+              '\n----------'
+              '\n1)Create PC\'s to add to the Current PC\'s Pool'
+              '\n2)Create NPC\'s to add to the Current NPC\'s Pool')
+
+        if current_PC_pool:
+            print('3)Select PC from Current PC\'s Pool')
+
+        if current_NPC_pool:
+            print('4)Select NPC from Current NPC\'s Pool')
+
+        if len(selected_NPCs) >= 1 and len(selected_PCs) >= 1:
+            print('5)Run Stealth Checks with currently selected NPC\'s and PC\'s.')
+    # add pcs to pool
+    def add_PC_to_pool():
+        name = input('What is the PC\'s name?')
+        while True:
+            try:
+                spot_mod = int(input('What is the PC\'s Spot Modifier?'))
+                try:
+                    listen_mod = int(input('What is the PC\'s Listen Modifier?'))
+                    try:
+                        sneak_mod = int(input('What is the PC\'s Move Silently Modifier?'))
+                        try:
+                            hide_mod = int(input('What is the PC\'s Hide Modifier?'))
+                            try:
+                                while True:
+                                    speed = int(input('What is the PC\'s speed in 5 foot intervals(5 or 10 or 15, etc...)?'))
+                                    if (speed%5)!=0:
+                                        speed = int(input('Please enter a valid speed (in intervals of 5 feet 5,10,15, etc...)'))
+
+                            except ValueError:
+                                print('That was not a valid number please enter an integer.')
+                        except ValueError:
+                            print('That was not a valid number please enter an integer.')
+                    except ValueError:
+                        print('That was not a valid number please enter an integer.')
+                except ValueError:
+                    print('That was not a valid number please enter an integer.')
+            except ValueError:
+                print('That was not a valid number please enter an integer.')
+    # Here begins the guts of the runtime components
+    while outermost_loop_variable:
+        display_main_menu()
+        main_menu_choice = input('Please Choose An Option From Above')
+
+        if main_menu_choice == '1':
+            print('ENTERING SETUP AND RUN')
+            display_setup_menu()
+
+        elif main_menu_choice == '2':
+            # Version 2.0 will save some of these and allow editing of saved ones.
+            print('EXITING PROGRAM\nFLUSHING ALL CURRENT PCS AND NPCS')
+            sys.exit()
+        else:
+            print('Sorry, the option you selected either is not yet available or never will be.'
+                  '\nPlease select a different option'
+                  '\n')
+main()
