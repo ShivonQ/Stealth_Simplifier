@@ -1,5 +1,8 @@
 import tabulate
 import sys
+import NPC
+import PC
+import d20
 
 
 def main():
@@ -17,7 +20,7 @@ def main():
                                '\n1)Setup and run stealth checks.'
                                '\n2)Exit program.')
     # One menu deep, this is where PCs and NPCs will be chosen and
-    # added
+
     def display_setup_menu():
         print('----------'
               '\nSetup Menu'
@@ -34,6 +37,7 @@ def main():
         if len(selected_NPCs) >= 1 and len(selected_PCs) >= 1:
             print('5)Run Stealth Checks with currently selected NPC\'s and PC\'s.')
     # add pcs to pool
+
     def add_PC_to_pool():
         name = input('What is the PC\'s name?')
         while True:
@@ -48,9 +52,13 @@ def main():
                             try:
                                 while True:
                                     speed = int(input('What is the PC\'s speed in 5 foot intervals(5 or 10 or 15, etc...)?'))
-                                    if (speed%5)!=0:
-                                        speed = int(input('Please enter a valid speed (in intervals of 5 feet 5,10,15, etc...)'))
 
+                                    if (speed % 5) != 0:
+
+                                        speed = int(input('Please enter a valid speed (in intervals of 5 feet 5,10,15, etc...)'))
+                                    elif (speed % 5) == 0:
+                                        break
+                                break
                             except ValueError:
                                 print('That was not a valid number please enter an integer.')
                         except ValueError:
@@ -61,6 +69,11 @@ def main():
                     print('That was not a valid number please enter an integer.')
             except ValueError:
                 print('That was not a valid number please enter an integer.')
+
+        #         MAKE THE PC IS EVERYTHING WENT FINE
+        new_pc = PC(name, spot_mod, listen_mod, sneak_mod, hide_mod, speed)
+        current_PC_pool.append(new_pc)
+
     # Here begins the guts of the runtime components
     while outermost_loop_variable:
         display_main_menu()
@@ -69,6 +82,8 @@ def main():
         if main_menu_choice == '1':
             print('ENTERING SETUP AND RUN')
             display_setup_menu()
+
+
 
         elif main_menu_choice == '2':
             # Version 2.0 will save some of these and allow editing of saved ones.
