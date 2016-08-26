@@ -41,6 +41,8 @@ def main():
     # add pcs to pool
 
     def add_PC_to_pool():
+        # Add a detector for whatever symbol you keep the items in the file seperated by
+        # Perhaps make this method return a list of values.  That way I can have PC just fill in the last 3 elements of NPC.  ERGO More succinct.
         name = input('What is the PC\'s name?')
         while True:
             try:
@@ -73,7 +75,7 @@ def main():
                 print('That was not a valid number please enter an integer.')
 
         #         MAKE THE PC IS EVERYTHING WENT FINE
-        new_pc = PC(name, spot_mod, listen_mod, sneak_mod, hide_mod, speed)
+        new_pc = PC.PC(name, spot_mod, listen_mod, sneak_mod, hide_mod, speed)
         current_PC_pool.append(new_pc)
 
     # Here begins the guts of the runtime components
