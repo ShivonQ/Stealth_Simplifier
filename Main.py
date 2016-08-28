@@ -38,9 +38,11 @@ def main():
         if len(selected_NPCs) >= 1 and len(selected_PCs) >= 1:
             print('5)Run Stealth Checks with currently selected NPC\'s and PC\'s.')
         print('X) Exit this menu to main menu.\n')
+
     # add pcs to pool
+
     def add_NPC_to_pool():
-        stats_list=[]
+        stats_list = []
         name = input('What is the Character\'s name?')
         stats_list.append(name)
         # TODO: Switch it so instead of "Character's" it actually says the name.
@@ -65,7 +67,7 @@ def main():
         # Add a detector for whatever symbol you keep the items in the file seperated by
         # Perhaps make this method return a list of values.  That way I can have PC just fill in the last 3 elements of NPC.  ERGO More succinct.
 
-        char_data_set = add_NPC_to_pool()
+        pc_data_set = add_NPC_to_pool()
 
         while True:
             # try:
@@ -80,14 +82,14 @@ def main():
             #
             try:
                 sneak_mod = int(input('What is the PC\'s Move Silently Modifier?'))
-                char_data_set.append(sneak_mod)
+                pc_data_set.append(sneak_mod)
                 break
             except ValueError:
                 print('That was not a valid number please enter an integer.')
         while True:
             try:
                 hide_mod = int(input('What is the PC\'s Hide Modifier?'))
-                char_data_set.append(hide_mod)
+                pc_data_set.append(hide_mod)
                 break
             except ValueError:
                 print('That was not a valid number please enter an integer.')
@@ -99,14 +101,28 @@ def main():
 
                     print('That was not a valid speed, try again.)')
                 elif (speed % 5) == 0:
-                    char_data_set.append(speed)
+                    pc_data_set.append(speed)
                     break
         except ValueError:
             print('That was not a valid number please enter an integer.')
 
         #         MAKE THE PC IS EVERYTHING WENT FINE
-        new_pc = PC.PC(char_data_set[0], char_data_set[1], char_data_set[2], char_data_set[3], char_data_set[4], char_data_set[5])
+        new_pc = PC.PC(pc_data_set[0], pc_data_set[1], pc_data_set[2], pc_data_set[3], pc_data_set[4], pc_data_set[5])
         current_PC_pool.append(new_pc)
+
+    def display_pc_pool():
+        menu_counter = 0
+        print('Currently created PC\'s\n--------------------------')
+        for pc in current_PC_pool:
+            menu_counter+1
+            print('{}) {}').format(menu_counter, pc.name)
+
+    def display_npc_pool():
+        menu_counter = 0
+        print('Currently created NPC\'s\n--------------------------')
+        for npc in current_NPC_pool:
+            menu_counter+1
+            print('{}) {}').format(menu_counter, npc.name)
 
     # Here begins the guts of the runtime components
     while outermost_loop_variable:
