@@ -12,6 +12,7 @@ def main():
     selected_PCs = []
     selected_NPCs = []
     check_parameters = []
+
     # TODO: Remove these 8 lines when working
     test_PC = PC.PC('Malcolm', 5, 5, 5, 5, 20)
     test_PC2 = PC.PC('Amy', 5, 5, 5, 5, 20)
@@ -23,7 +24,6 @@ def main():
     selected_NPCs.append(test_NPC2)
 
     outermost_loop_variable = True
-    setup_menu_loop = True
     # Follows are the various menus that the user will be navigating
     def display_main_menu():
         print('Welcome to the stealth simplifier app.'
@@ -51,6 +51,46 @@ def main():
             selections_display()
         print('X) Exit this menu to main menu.\n')
 
+    def selections_display():
+        print('---Selected PC\'s---')
+        for pc in selected_PCs:
+            print(pc.name)
+        print('---Selected NPC\'s---')
+        for npc in selected_NPCs:
+            print(npc.name)
+
+        # print(tabulate(selected_PCs, headers=["Selected PC's"], tablefmt="pipe"))
+        # print(tabulate(selected_NPCs, headers=["Selected NPC's"], tablefmt="pipe"))
+
+
+    def display_pc_pool():
+        menu_counter = 0
+        print('Currently created PC\'s\n--------------------------')
+        for pc in current_PC_pool:
+            menu_counter = menu_counter + 1
+            print('{}) {}'.format(menu_counter, pc.name))
+
+    def display_npc_pool():
+        menu_counter = 0
+        print('Currently created NPC\'s\n--------------------------')
+        for npc in current_NPC_pool:
+            menu_counter = menu_counter + 1
+            print('{}) {}'.format(menu_counter, npc.name))
+
+
+    def display_terrain_mods():
+        print('---Terrain Modifiers---')
+        print('1) No terrain modifier\n'
+              '2) Noisy (scree, shallow or deep bog, undergrowth, dense rubble)\n'
+              '3) Very noisy (dense undergrowth, deep snow)')
+
+    def display_speed_mod_options():
+        print('---Speed Modifiers---')
+        print('1) Moving Up To Half Speed (No Modifier)\n'
+              '2) Moving Up To Full Speed (-5)\n'
+              '3) Moving Full Speed or Faster (-20)\n')
+
+
     # add pcs to pool
 
     def add_NPC_to_pool():
@@ -58,6 +98,8 @@ def main():
         name = input('What is the Character\'s name?')
         stats_list.append(name)
         # TODO: Switch it so instead of "Character's" it actually says the name.
+        # I had to use seperate and repeating try/except/while loops to achieve the results I wanted.
+        # I wanted the user to only have to input a single piece of information again should something be entered wrong.
         while True:
             try:
                 spot_mod = int(input('What is the Character\'s Spot Modifier?'))
@@ -72,15 +114,16 @@ def main():
                 break
             except ValueError:
                 print('That was not a valid number please enter an integer.')
+        #         Pass these stats back out.  This is so that I could reuse this code for the PC createion as well.
         return stats_list
 
 
     def add_PC_to_pool():
-        # Add a detector for whatever symbol you keep the items in the file seperated by
-        # Perhaps make this method return a list of values.  That way I can have PC just fill in the last 3 elements of NPC.  ERGO More succinct.
+        # TODO: Add a detector for whatever symbol you keep the items in the file seperated by once File Support is inlcuded
 
+        # run the NPC creator, take the elements that it provides and then filll in the others.
         pc_data_set = add_NPC_to_pool()
-
+        # while there is a ValueError exception, keep asking for data until they finally give you something correct.
         while True:
             # try:
             #     spot_mod = int(input('What is the PC\'s Spot Modifier?'))
@@ -106,9 +149,10 @@ def main():
             except ValueError:
                 print('That was not a valid number please enter an integer.')
         try:
+            # Check for a value error, but more importantly...
             while True:
                 speed = int(input('What is the PC\'s speed in 5 foot intervals(5 or 10 or 15, etc...)?'))
-
+                # Check that the number they gave yyou is divisible by 5.  This is D&D Dammit not the real world.
                 if (speed % 5) != 0:
 
                     print('That was not a valid speed, try again.)')
@@ -118,39 +162,18 @@ def main():
         except ValueError:
             print('That was not a valid number please enter an integer.')
 
-        #         MAKE THE PC IS EVERYTHING WENT FINE
+        #         MAKE THE PC If EVERYTHING WENT FINE
         new_pc = PC.PC(pc_data_set[0], pc_data_set[1], pc_data_set[2], pc_data_set[3], pc_data_set[4], pc_data_set[5])
+        # Add them to the pool of PCS
         current_PC_pool.append(new_pc)
 
-    def selections_display():
-        print('---Selected PC\'s---')
-        for pc in selected_PCs:
-            print(pc.name)
-        print('---Selected NPC\'s---')
-        for npc in selected_NPCs:
-            print(npc.name)
-
-        # print(tabulate(selected_PCs, headers=["Selected PC's"], tablefmt="pipe"))
-        # print(tabulate(selected_NPCs, headers=["Selected NPC's"], tablefmt="pipe"))
-
-    def display_pc_pool():
-        menu_counter = 0
-        print('Currently created PC\'s\n--------------------------')
-        for pc in current_PC_pool:
-            menu_counter = menu_counter + 1
-            print('{}) {}'.format(menu_counter, pc.name))
-
-    def display_terrain_mods():
-        print('---Terrain Modifiers---')
-        print('1) No terrain modifier\n'
-              '2) Noisy (scree, shallow or deep bog, undergrowth, dense rubble)\n'
-              '3) Very noisy (dense undergrowth, deep snow)')
 
     def create_check_parameters():
-
+        # Empty the list of parameters so it is fresh.
         del check_parameters[:]
         while True:
             try:
+                # Didtance?
                 distance = int(input('How far are the PC\'s attempting to stealth, in feet?'))
                 check_parameters.append(distance)
                 break
@@ -159,7 +182,9 @@ def main():
                 'That was not a Integer, please try again.'
 
         while True:
+            # display options
             display_speed_mod_options()
+            # speed modifiers for the roll
             speed_mod_choice = input('What is the Speed Modifier Option?')
 
             if speed_mod_choice in '123':
@@ -170,26 +195,25 @@ def main():
                 print('Please Choose An Option From the Menu')
 
         while True:
+            # Display Options
             display_terrain_mods()
+            # terrain modifiers for the rolls?
             terrain_mod_choice = input('What type of terrain?')
             if terrain_mod_choice in '123':
                 check_parameters.append(terrain_mod_choice)
                 break
             else:
                 print('Please select an option from above.')
-
+        # return the parameters so that the next function can use them
         return check_parameters
 
     def run_checks():
+        # Make the parameters
         check_params = create_check_parameters()
+        # Pass them to the checks function (Which needs to be broken down further into even MORE discrete bits.)
         final_list = pcs_vs_npcs_checks(check_params)
-        print(tabulate(final_list, headers=['header1', 'header2', 'header3', 'header4', 'header5'],tablefmt="pipe", missingval='Null'))
-
-    def display_speed_mod_options():
-        print('---Speed Modifiers---')
-        print('1) Moving Up To Half Speed (No Modifier)\n'
-              '2) Moving Up To Full Speed (-5)\n'
-              '3) Moving Full Speed or Faster (-20)\n')
+        # Display the list or results using this nice and fancy tabulate module
+        print(tabulate(final_list, headers=['PC', selected_NPCs[0].name, selected_NPCs[0].name, selected_NPCs[1].name, selected_NPCs[1].name],tablefmt="pipe", missingval='Null'))
 
     def pcs_vs_npcs_checks(check_parameters):
         # TODO: Make this smoother code in the future.
@@ -200,7 +224,8 @@ def main():
         final_results = []
         distance = int(check_parameters[0])
         fastest_pc_speed = 0
-
+        # For each character find out which is fastest, and use their speed for the checks since they will reach the destination first.
+        # TODO: Put this in its own function (EASY)
         for pc in selected_PCs:
             if pc.speed > 0:
                 fastest_pc_speed = pc.speed
@@ -208,31 +233,50 @@ def main():
                     fastest_pc_speed = fastest_pc_speed / 2
                 elif check_parameters[1] == '3':
                     fastest_pc_speed = fastest_pc_speed * 2
-
+        # Figure out what those parameters that were passed to you even mean! These are for how fast they're moving
         if check_parameters[1] == '2':
-            speed_modifier - 5
+            # Ah! theyre moving quickly, hard to be stealthy when quick! MINUS 5
+            speed_modifier = speed_modifier - 5
         elif check_parameters[1] == '3':
-            speed_modifier - 20
-
+            # Theyre literally running while trying to be stealthy.  nearly impossible. MINUS 20
+            speed_modifier = speed_modifier - 20
+        # These params are for the type of terrain theyre going over
         if check_parameters[2] == '2':
-            terrain_modifier - 2
+            # Sort of noisy terrain, MINUS 2
+            terrain_modifier = terrain_modifier - 2
         elif check_parameters[2] == '3':
-            terrain_modifier - 5
-        total_env_mods-speed_modifier-terrain_modifier
+            # Fairly loud terrain, MINUS 5
+            terrain_modifier = terrain_modifier - 5
+
+        #     Add the modifiers together into a lump mod to be subtracted from the roll
+        total_env_mods = total_env_mods - speed_modifier - terrain_modifier
+
+        # This variable is improperly named, but wont be changed until v1.2
+        # It was originally a checker for just 2 players stealthing, to see that the distance(or number of checks really)
+        # Isnt changed until all the PC's have taken a check.  I realized later on that I could use the modulus of the length of the
+        # selected_PCs list to more accurately track that, since I could have 5 players doing it, or just 1 even
         even_or_odd = 0
+        # While the PCs are not at their end point
         while distance >= 0:
+            # for each PC check their stealth and hides against
             for pc in selected_PCs:
-                del row_result[:]
-                even_or_odd = even_or_odd+1
+                # This bit here is causing trouble, and I am getting repeat rows... not sure whats wrong with it...
+                row_result = []
+                # keep the tracker counting
+                even_or_odd = even_or_odd + 1
+                # Add the name to the results row
                 row_result.append(pc.name)
-
+                # Each of the NPC's looking and listening
                 for npc in selected_NPCs:
-
+                    # Make the PC's Checks
                     sneak_result = d20.d20.roll(d20, pc.sneak_mod-total_env_mods)
+                    # and the NPCs checks
                     listen_result = d20.d20.roll(d20, npc.listen_mod)
+                    # PC
                     hide_result = d20.d20.roll(d20, pc.hide_mod)
+                    # NPC
                     spot_result = d20.d20.roll(d20, npc.spot_mod)
-
+                    # COMPARE RESULTS TO SEE IF SPOTTED OR HEARD
                     if sneak_result > listen_result:
                         row_result.append('Sneak: Success')
                     else:
@@ -242,19 +286,15 @@ def main():
                         row_result.append('Hide:  Success')
                     else:
                         row_result.append('-----FAIL-----')
+                #         Push the results out onto the display board
                 final_results.append(row_result)
-
+                # If each PC has gone, then subtract the speed they are going from distance remaining
                 if even_or_odd % len(selected_PCs) == 0:
                     distance = distance-fastest_pc_speed
+        #             return the final list to be tabulated
         return final_results
 
-    def display_npc_pool():
-        menu_counter = 0
-        print('Currently created NPC\'s\n--------------------------')
-        for npc in current_NPC_pool:
-            menu_counter = menu_counter + 1
-            print('{}) {}'.format(menu_counter, npc.name))
-
+    #  This function allows a character to be selected, it has been generified to work on either the NPC list or the PC list
     def select_the_char(which_list):
         if which_list == 0:
             # This is going to take a NPC
@@ -269,6 +309,19 @@ def main():
             pc = current_PC_pool[choice-1]
             selected_PCs.append(pc)
             del current_PC_pool[choice-1]
+
+    #         removes all characters from the selected pool automatically
+    def remove_all_chars_from_selected():
+        counter = 0
+        for pc in selected_PCs:
+            current_PC_pool.append(pc)
+            del current_PC_pool[counter]
+            counter = counter + 1
+        counter2 = 0
+        for npc in selected_NPCs:
+            current_NPC_pool.append(npc)
+            del current_NPC_pool[counter2]
+            counter2 = counter2 + 1
 
 
     # Here begins the guts of the runtime components
@@ -291,6 +344,7 @@ def main():
                     add_PC_to_pool()
                 elif setup_menu_choice == '2':
                     print('Running Add NPC to Pool Method')
+                    # add an NPC
                     char_data_set = add_NPC_to_pool()
                     new_npc = NPC.NPC(char_data_set[0], char_data_set[1], char_data_set[2])
                     current_NPC_pool.append(new_npc)
