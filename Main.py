@@ -12,6 +12,15 @@ def main():
     selected_PCs = []
     selected_NPCs = []
     check_parameters = []
+    # TODO: Remove these 8 lines when working
+    test_PC = PC.PC('Malcolm', 5, 5, 5, 5, 20)
+    test_PC2 = PC.PC('Amy', 5, 5, 5, 5, 20)
+    test_NPC = NPC.NPC('Guard1', 2, 2)
+    test_NPC2 = NPC.NPC('Guard2', 2, 2)
+    selected_PCs.append(test_PC)
+    selected_PCs.append(test_PC2)
+    selected_NPCs.append(test_NPC)
+    selected_NPCs.append(test_NPC2)
 
     outermost_loop_variable = True
     setup_menu_loop = True
@@ -114,8 +123,15 @@ def main():
         current_PC_pool.append(new_pc)
 
     def selections_display():
-        print(tabulate(selected_PCs, headers=["Selected PC's"], tablefmt="pipe"))
-        print(tabulate(selected_NPCs, headers=["Selected NPC's"], tablefmt="pipe"))
+        print('---Selected PC\'s---')
+        for pc in selected_PCs:
+            print(pc.name)
+        print('---Selected NPC\'s---')
+        for npc in selected_NPCs:
+            print(npc.name)
+
+        # print(tabulate(selected_PCs, headers=["Selected PC's"], tablefmt="pipe"))
+        # print(tabulate(selected_NPCs, headers=["Selected NPC's"], tablefmt="pipe"))
 
     def display_pc_pool():
         menu_counter = 0
@@ -142,29 +158,32 @@ def main():
             except ValueError:
                 'That was not a Integer, please try again.'
 
-            while True:
-                display_speed_mod_options()
-                speed_mod_choice = input('What is the Speed Modifier Option?')
+        while True:
+            display_speed_mod_options()
+            speed_mod_choice = input('What is the Speed Modifier Option?')
 
-                if speed_mod_choice in '123':
-                    check_parameters.append(speed_mod_choice)
-                    break
+            if speed_mod_choice in '123':
+                check_parameters.append(speed_mod_choice)
+                break
 
-                else:
-                    print('Please Choose An Option From the Menu')
+            else:
+                print('Please Choose An Option From the Menu')
 
-            while True:
-                display_terrain_mods()
-                terrain_mod_choice = input('What type of terrain?')
-                if terrain_mod_choice in '123':
-                    check_parameters.append(terrain_mod_choice)
-                    break
-                else:
-                    print('Please select an option from above.')
+        while True:
+            display_terrain_mods()
+            terrain_mod_choice = input('What type of terrain?')
+            if terrain_mod_choice in '123':
+                check_parameters.append(terrain_mod_choice)
+                break
+            else:
+                print('Please select an option from above.')
+
+        return check_parameters
+
     def run_checks():
-        list_of_rows=[]
-        create_check_parameters()
-        pcs_vs_npcs_checks()
+        check_params = create_check_parameters()
+        final_list = pcs_vs_npcs_checks(check_params)
+        print(tabulate(final_list, headers=['header1', 'header2', 'header3', 'header4', 'header5'],tablefmt="pipe", missingval='Null'))
 
     def display_speed_mod_options():
         print('---Speed Modifiers---')
@@ -172,7 +191,8 @@ def main():
               '2) Moving Up To Full Speed (-5)\n'
               '3) Moving Full Speed or Faster (-20)\n')
 
-    def pcs_vs_npcs_checks():
+    def pcs_vs_npcs_checks(check_parameters):
+        # TODO: Make this smoother code in the future.
         terrain_modifier = 0
         speed_modifier = 0
         total_env_mods = 0
@@ -185,7 +205,9 @@ def main():
             if pc.speed > 0:
                 fastest_pc_speed = pc.speed
                 if check_parameters[1] == '1':
-                    fastest_pc_speed%2
+                    fastest_pc_speed = fastest_pc_speed / 2
+                elif check_parameters[1] == '3':
+                    fastest_pc_speed = fastest_pc_speed * 2
 
         if check_parameters[1] == '2':
             speed_modifier - 5
@@ -197,10 +219,11 @@ def main():
         elif check_parameters[2] == '3':
             terrain_modifier - 5
         total_env_mods-speed_modifier-terrain_modifier
+        even_or_odd = 0
         while distance >= 0:
-
             for pc in selected_PCs:
                 del row_result[:]
+                even_or_odd = even_or_odd+1
                 row_result.append(pc.name)
 
                 for npc in selected_NPCs:
@@ -220,7 +243,10 @@ def main():
                     else:
                         row_result.append('-----FAIL-----')
                 final_results.append(row_result)
-                distance-fastest_pc_speed
+
+                if even_or_odd % len(selected_PCs) == 0:
+                    distance = distance-fastest_pc_speed
+        return final_results
 
     def display_npc_pool():
         menu_counter = 0
@@ -281,6 +307,7 @@ def main():
 
                 elif setup_menu_choice == '5' and len(selected_PCs) >= 1 and len(selected_NPCs) >= 1:
                     print('Running Checks with Tabulate OutPut')
+                    run_checks()
 
                 elif setup_menu_choice.lower() == 'x':
                     print('Exiting Setup Menu')
