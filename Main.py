@@ -323,7 +323,7 @@ def main():
             del current_NPC_pool[counter2]
             counter2 = counter2 + 1
 
-
+    # TODO: Put all of this below into a method as well. Maybe
     # Here begins the guts of the runtime components
     while outermost_loop_variable:
         display_main_menu()
@@ -362,6 +362,7 @@ def main():
                 elif setup_menu_choice == '5' and len(selected_PCs) >= 1 and len(selected_NPCs) >= 1:
                     print('Running Checks with Tabulate OutPut')
                     run_checks()
+                    remove_all_chars_from_selected()
 
                 elif setup_menu_choice.lower() == 'x':
                     print('Exiting Setup Menu')
