@@ -309,19 +309,19 @@ def main():
             pc = current_PC_pool[choice-1]
             selected_PCs.append(pc)
             del current_PC_pool[choice-1]
-
     #         removes all characters from the selected pool automatically
+
     def remove_all_chars_from_selected():
         counter = 0
         for pc in selected_PCs:
             current_PC_pool.append(pc)
-            del selected_PCs[counter]
             counter = counter + 1
+        del selected_PCs[:]
         counter2 = 0
         for npc in selected_NPCs:
             current_NPC_pool.append(npc)
-            del selected_NPCs[counter2]
             counter2 = counter2 + 1
+        del selected_NPCs[:]
 
     # TODO: Put all of this below into a method as well. Maybe
     # Here begins the guts of the runtime components
