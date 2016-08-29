@@ -114,13 +114,14 @@ def main():
         current_PC_pool.append(new_pc)
 
     def selections_display():
-        print(tabulate(current_PC_pool, current_NPC_pool, headers=["PC's","NPC's"], tablefmt="pipe"))
+        print(tabulate(selected_PCs, headers=["Selected PC's"], tablefmt="pipe"))
+        print(tabulate(selected_NPCs, headers=["Selected NPC's"], tablefmt="pipe"))
 
     def display_pc_pool():
         menu_counter = 0
         print('Currently created PC\'s\n--------------------------')
         for pc in current_PC_pool:
-            menu_counter+1
+            menu_counter = menu_counter + 1
             print('{}) {}'.format(menu_counter, pc.name))
 
     def display_terrain_mods():
@@ -225,7 +226,7 @@ def main():
         menu_counter = 0
         print('Currently created NPC\'s\n--------------------------')
         for npc in current_NPC_pool:
-            menu_counter+1
+            menu_counter = menu_counter + 1
             print('{}) {}'.format(menu_counter, npc.name))
 
     def select_the_char(which_list):
