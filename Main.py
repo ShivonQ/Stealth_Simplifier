@@ -315,12 +315,12 @@ def main():
         counter = 0
         for pc in selected_PCs:
             current_PC_pool.append(pc)
-            del current_PC_pool[counter]
+            del selected_PCs[counter]
             counter = counter + 1
         counter2 = 0
         for npc in selected_NPCs:
             current_NPC_pool.append(npc)
-            del current_NPC_pool[counter2]
+            del selected_NPCs[counter2]
             counter2 = counter2 + 1
 
     # TODO: Put all of this below into a method as well. Maybe
